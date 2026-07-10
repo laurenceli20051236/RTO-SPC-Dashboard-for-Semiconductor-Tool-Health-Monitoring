@@ -52,13 +52,10 @@ The project is intentionally limited to synthetic RTO tool-health monitoring.
 
 It does not attempt to model:
 
-* RTP
-* LSA
-* ALA
 * Furnace operations
 * FDC sensor traces
 * APC feedback control
-* Real fab systems
+* Real FAB systems
 
 ### Baseline-only control limits
 
@@ -88,13 +85,13 @@ Across-fleet charts compare multiple RTO tools and chambers, but they do not cal
 
 Each displayed stream preserves its own:
 
-* Baseline mean
-* Baseline sigma
-* UCL
-* CL
-* LCL
-* Warning status
-* OOC status
+* Baseline Mean
+* Baseline Sigma
+* Upper Control Limit (UCL)
+* Control Limit (CL)
+* Lower Control Limit(LCL)
+* Warning Status
+* Out-Of-Control (OOC) Status
 
 ### Deterministic event detection
 
@@ -106,38 +103,74 @@ Local summaries and suggested review areas do not determine SPC status and do no
 
 ## Thickness Monitor Methodology
 
-The Phase 1 RTO thickness dashboard uses four primary module-level monitor metrics.
+The Phase 1 RTO thickness monitor uses two primary SPC chart types:
 
-| Display name | Internal metric name  | Engineering purpose                             |
-| ------------ | --------------------- | ----------------------------------------------- |
-| RTR Mean     | `thickness_rtr_mean`  | Tracks run-to-run average thickness movement    |
-| X-BAR        | `thickness_xbar`      | Tracks average monitor thickness behavior       |
-| WIW Stdev    | `thickness_wiw_stdev` | Tracks within-wafer thickness uniformity        |
-| SIGMA        | `thickness_sigma`     | Tracks process, chamber, or metrology variation |
+| SPC chart | Underlying monitor metric | Engineering purpose                                                                             |
+| --------- | ------------------------- | ----------------------------------------------------------------------------------------------- |
+| X-BAR     | RTR Mean                  | Tracks run-to-run average thickness behavior and detects thickness mean shift or drift          |
+| SIGMA     | WIW Stdev                 | Tracks within-wafer thickness variation and detects uniformity or process-variation degradation |
 
-I-MR is not the primary RTO thickness-monitor method in this project. It may be retained only as an optional fallback for individual-value streams without structured summary data.
-
-### Synthetic thickness limits
-
-For each stream, limits are calculated from baseline observations:
+In this project:
 
 ```text
-CL  = baseline mean
-UCL = baseline mean + 3 × baseline sigma
-LCL = baseline mean - 3 × baseline sigma
+RTR Mean is plotted on the X-BAR chart.
+WIW Stdev is plotted on the SIGMA chart.
 ```
 
-For non-negative variation metrics such as WIW Stdev and SIGMA, a negative LCL may be clipped to zero.
+X-BAR and RTR Mean are not separate monitor metrics.
 
-### Thickness rules
+SIGMA and WIW Stdev are not separate monitor metrics.
 
-| Rule                             | Condition                                | Severity |
-| -------------------------------- | ---------------------------------------- | -------- |
-| `THICKNESS_WARNING_ZONE`         | Value exceeds ±2σ but remains inside ±3σ | Medium   |
-| `THICKNESS_BEYOND_CONTROL_LIMIT` | Mean metric exceeds UCL or LCL           | High     |
-| `THICKNESS_VARIATION_HIGH`       | WIW Stdev or SIGMA exceeds UCL           | High     |
+The internal metric names are:
 
----
+```text
+thickness_rtr_mean
+thickness_wiw_stdev
+```
+
+The dashboard must not create duplicate metric streams named:
+
+```text
+thickness_xbar
+thickness_sigma
+```
+
+### X-BAR chart
+
+The X-BAR chart displays the RTR Mean for each synthetic RTO thickness-monitor run.
+
+It is used to review:
+
+* Run-to-run mean thickness behavior
+* Process centering
+* Gradual thickness drift
+* Sudden mean shift
+* Tool and chamber matching
+* Metrology trend consistency
+
+### SIGMA chart
+
+The SIGMA chart displays the WIW Stdev for each synthetic RTO thickness-monitor run.
+
+It is used to review:
+
+* Within-wafer thickness uniformity
+* Increasing wafer-level variation
+* Chamber thermal uniformity
+* Wafer placement or process-distribution changes
+* Metrology repeatability
+
+### Baseline-only limits
+
+Control limits for both chart types are calculated independently from baseline data for each:
+
+```text
+tool_id + chamber_id + recipe_group + metric_name
+```
+
+Monitoring observations are evaluated against frozen baseline limits.
+
+Across-fleet charts are used for tool and chamber comparison only. They must not calculate a shared fleet-wide control limit.
 
 ## Particle Monitor Methodology
 
