@@ -207,17 +207,15 @@ Provides an across-fleet view of:
 
 Provides fleet-level and selected-stream views for:
 
-* RTR Mean
-* X-BAR
-* WIW Stdev
-* SIGMA
+* RTR Mean, X-BAR
+* WIW Stdev, SIGMA
 
 The selected-stream view includes:
 
-* Value trend
-* UCL, CL, and LCL
-* Warning markers
-* OOC markers
+* Value Trend
+* UCL, CL & LCL
+* Warning Markers
+* OOC Markers
 * Associated event records
 
 ### 3. Particle Alerts
@@ -230,13 +228,13 @@ Provides fleet-level and selected-stream views for:
 
 The selected-stream view includes:
 
-* Particle trend
-* Warning threshold
-* High threshold
-* Medium-severity markers
-* High-severity markers
-* Repeated-event escalation markers
-* Associated event records
+* Particle Trend
+* Warning Threshold
+* High Threshold
+* Medium-severity Markers
+* High-severity Markers
+* Repeated-event Escalation Markers
+* Associated Event Records
 
 ### 4. Excursion Review
 
@@ -278,9 +276,7 @@ Required fleet views include:
 ### Thickness
 
 * Fleet RTR Mean trend
-* Fleet X-BAR trend
 * Fleet WIW Stdev trend
-* Fleet SIGMA trend
 * Thickness-event counts by tool, chamber, and metric
 
 ### Particle
