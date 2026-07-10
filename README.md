@@ -1,4 +1,4 @@
-# Rapid Thermal Oxidation (RTO) Statistics Process Control (SPC) Dashboard for Semiconductor Tool Health Monitoring
+# Rapid Thermal Oxidation (RTO) Statistical Process Control (SPC) Dashboard for Semiconductor Tool Health Monitoring
 
 A synthetic semiconductor manufacturing analytics dashboard for RTO tool-health monitoring, combining module-level thickness monitoring, particle-adder alerting, deterministic SPC logic, across-fleet visualization, and traceable excursion review.
 
