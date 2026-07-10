@@ -12,8 +12,8 @@ The dashboard is designed around two core RTO monitor categories:
 
 ### Thickness monitoring
 
-* RTR Mean, X-BAR chart
-* WIW Stdev, SIGMA chart
+* RTR Mean, X-BAR
+* WIW Stdev, SIGMA
 
 ### Particle monitoring
 
