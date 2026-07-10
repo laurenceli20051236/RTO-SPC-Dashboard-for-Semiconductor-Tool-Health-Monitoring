@@ -1,0 +1,43 @@
+# ============================================================
+# PM Deferral Engine - Default Configuration
+# All thresholds tunable WITHOUT code changes.
+# Recommended re-tuning cadence: quarterly, after PM history review.
+# ============================================================
+
+decision:
+  # Risk score below this -> DEFER eligible (assuming net_benefit > 0)
+  risk_threshold_defer: 0.35
+  # Default look-ahead horizon for deferral evaluation
+  default_defer_horizon_days: 5
+
+# Risk score bins for human-readable labels (upper bound %)
+risk_levels:
+  LOW: 15        # 0-15%   green
+  MODERATE: 35   # 15-35%  yellow
+  HIGH: 60       # 35-60%  orange
+  CRITICAL: 100  # 60-100% red
+
+# Hard stops (override economic decision)
+hard_stops:
+  quality_index_minimum: 1.33      # below this -> EMERGENCY PM
+  max_deferral_multiplier: 1.5     # max PM interval = scheduled * this
+  spc_violation_lookback_days: 7   # any WE violation in window -> EMERGENCY
+
+# Weibull reliability model (lamp/heater wear-out)
+weibull:
+  beta: 2.3      # shape (>1 = wear-out regime)
+  eta: 180.0     # scale, days (characteristic life)
+
+# Cost parameters (USD per RTO toolset)
+costs:
+  pm_event: 8000      # labor + parts + 4hr downtime
+  monitor_wafer: 1200 # RTO oxide-thickness test wafer + thin-film metrology
+  excursion: 150000   # scrap lot + investigation + recovery
+
+# Risk score component weights
+risk_weights:
+  weibull_hazard: 5.0    # scales delta_F(t)
+  weibull_cap: 0.5
+  drift_scaling: 0.4
+  drift_cap: 0.3
+  quality_index_penalty: 0.4

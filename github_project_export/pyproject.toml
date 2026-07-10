@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rto-spc-dashboard"
+version = "0.1.0"
+description = "RTO SPC Dashboard for synthetic semiconductor tool health monitoring"
+requires-python = ">=3.11"
+dependencies = [
+    "pandas",
+    "numpy",
+    "plotly",
+    "streamlit",
+    "pytest",
+    "pyarrow",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
