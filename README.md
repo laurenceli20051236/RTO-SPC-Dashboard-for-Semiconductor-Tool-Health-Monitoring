@@ -83,8 +83,8 @@ Across-fleet charts compare multiple RTO tools and chambers, but they do not cal
 
 Each displayed stream preserves its own:
 
-* Baseline Mean
-* Baseline Sigma
+* Baseline MEAN
+* Baseline SIGMA
 * Upper Control Limit (UCL)
 * Control Limit (CL)
 * Lower Control Limit(LCL)
@@ -107,17 +107,6 @@ The Phase 1 RTO thickness monitor uses two primary SPC chart types:
 | --------- | ------------------------- | ----------------------------------------------------------------------------------------------- |
 | X-BAR     | RTR Mean                  | Tracks run-to-run average thickness behavior and detects thickness mean shift or drift          |
 | SIGMA     | WIW Stdev                 | Tracks within-wafer thickness variation and detects uniformity or process-variation degradation |
-
-In this project:
-
-```text
-RTR Mean is plotted on the X-BAR chart.
-WIW Stdev is plotted on the SIGMA chart.
-```
-
-X-BAR and RTR Mean are not separate monitor metrics.
-
-SIGMA and WIW Stdev are not separate monitor metrics.
 
 The internal metric names are:
 
@@ -158,7 +147,7 @@ It is used to review:
 * Wafer placement or process-distribution changes
 * Metrology repeatability
 
-### Baseline-only limits
+### Baseline-only Limits
 
 Control limits for both chart types are calculated independently from baseline data for each:
 
@@ -172,7 +161,7 @@ Across-fleet charts are used for tool and chamber comparison only. They must not
 
 ## Particle Monitor Methodology
 
-Phase 1 particle monitoring uses synthetic engineering thresholds and repeated-event escalation.
+Particle monitoring uses synthetic engineering thresholds and repeated-event escalation.
 
 It does not use c-chart or u-chart logic as the primary alert method.
 
@@ -184,7 +173,7 @@ It does not use c-chart or u-chart logic as the primary alert method.
 
 These thresholds are synthetic demonstration values and are not production limits.
 
-### Particle rules
+### Particle Rules
 
 | Rule                                 | Condition                                                                                       | Severity |
 | ------------------------------------ | ----------------------------------------------------------------------------------------------- | -------- |
