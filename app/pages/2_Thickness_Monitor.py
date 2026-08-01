@@ -92,5 +92,5 @@ else:
     st.subheader("Methodology Note")
     st.write(
         "RTO thickness monitor uses module-level synthetic metrics: RTR Mean, X-BAR, WIW Stdev, and SIGMA. "
-        "Limits are calculated from baseline data only for each tool/chamber/recipe/metric stream."
+        "Each fleet overlay shows one baseline-only Golden Tool LCL/CL/UCL reference set for all displayed chambers."
     )

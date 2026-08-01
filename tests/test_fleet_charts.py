@@ -76,12 +76,12 @@ def _events() -> pd.DataFrame:
     )
 
 
-def test_fleet_thickness_chart_includes_multiple_tools_and_chambers_without_shared_limits() -> None:
+def test_fleet_thickness_chart_includes_multiple_tools_and_one_golden_limit_set() -> None:
     fig = plot_fleet_thickness_trend(_spc_rows(), "thickness_xbar")
     legend_names = {trace.name for trace in fig.data if trace.name}
     assert any("RTO_01_Ch_A" in name for name in legend_names)
     assert any("RTO_02_Ch_B" in name for name in legend_names)
-    assert len({tuple(trace.y) for trace in fig.data if "UCL" in str(trace.name)}) >= 2
+    assert {tuple(trace.y) for trace in fig.data if "UCL" in str(trace.name)} == {(101.0, 101.0)}
 
 
 def test_fleet_particle_chart_uses_threshold_logic_only() -> None:

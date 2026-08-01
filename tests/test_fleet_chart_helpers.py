@@ -37,7 +37,7 @@ def _fleet_thickness_rows() -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def test_fleet_thickness_chart_includes_multiple_tools_chambers_and_stream_limits() -> None:
+def test_fleet_thickness_chart_includes_multiple_streams_and_one_golden_limit_set() -> None:
     fig = plot_fleet_thickness_trend(_fleet_thickness_rows(), "rtr_mean")
 
     trace_names = " ".join(str(trace.name) for trace in fig.data)
@@ -46,8 +46,7 @@ def test_fleet_thickness_chart_includes_multiple_tools_chambers_and_stream_limit
 
     ucl_traces = [trace for trace in fig.data if str(trace.name).endswith(" UCL")]
     ucl_values = {tuple(float(value) for value in trace.y) for trace in ucl_traces}
-    assert (101.0, 101.0) in ucl_values
-    assert (202.0, 202.0) in ucl_values
+    assert ucl_values == {(101.0, 101.0)}
 
     assert tuple(fig.layout.xaxis.tickvals) == tuple(range(1, 15))
     assert tuple(fig.layout.xaxis.ticktext) == tuple(f"W{week:02d}" for week in range(1, 15))
@@ -57,7 +56,13 @@ def test_fleet_thickness_chart_includes_multiple_tools_chambers_and_stream_limit
         for annotation in fig.layout.annotations
         if str(annotation.text).startswith("<b>") and any(label in str(annotation.text) for label in ["UCL", "CL", "LCL"])
     ]
-    assert len(limit_annotations) == 6
+    assert limit_annotations == ["<b>UCL</b>", "<b>CL</b>", "<b>LCL</b>"]
+    note = next(annotation.text for annotation in fig.layout.annotations if str(annotation.text).startswith("<i>Note:"))
+    assert "Reference=RTO_01_Ch_A" in note
+    assert "LCL=99.0000" in note
+    assert "CL=100.0000" in note
+    assert "UCL=101.0000" in note
+    assert "202.0000" not in note
 
 
 def test_fleet_thickness_chart_uses_precomputed_event_flags() -> None:

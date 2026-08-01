@@ -18,9 +18,9 @@ This is an RTO-only synthetic dashboard.
 
 ### RTO Thickness Fleet Overlay
 
-RTR Mean, X-BAR, WIW Stdev, and SIGMA retain baseline-only limits for each tool/chamber/recipe/metric stream.
+RTR Mean, X-BAR, WIW Stdev, and SIGMA overlay chamber A/B points against one baseline-only Golden Tool LCL/CL/UCL reference set per chart.
 
-![Four RTO thickness SPC charts with chamber-level A/B overlays and right-side UCL, CL, and LCL labels](docs/screenshots/thickness_monitor.png)
+![Four RTO thickness SPC charts with chamber-level A/B overlays and one Golden Tool UCL, CL, and LCL reference set per chart](docs/screenshots/thickness_monitor.png)
 
 ### Particle Fleet Overlay
 

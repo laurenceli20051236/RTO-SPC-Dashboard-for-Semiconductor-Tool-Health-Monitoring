@@ -161,6 +161,21 @@ def _prepare_letter_chart_df(df: pd.DataFrame, *, max_weeks: int = 14) -> pd.Dat
     return ordered.sort_values("_week_index")
 
 
+def _single_reference_stream(df: pd.DataFrame) -> pd.DataFrame:
+    if df.empty:
+        return df
+
+    group_columns = [column for column in ["tool_id", "chamber_id", "metric_name"] if column in df.columns]
+    if not group_columns:
+        return df
+
+    reference_key = df[group_columns].drop_duplicates().sort_values(group_columns).iloc[0]
+    reference_mask = pd.Series(True, index=df.index)
+    for column in group_columns:
+        reference_mask &= df[column] == reference_key[column]
+    return df[reference_mask].sort_values("_week_index")
+
+
 def _add_paper_limit_traces(fig: go.Figure, ordered: pd.DataFrame, limit_columns: list[tuple[str, str, str]]) -> None:
     group_columns = [column for column in ["tool_id", "chamber_id", "metric_name"] if column in ordered.columns]
     seen_limit_series: set[tuple[str, tuple[float, ...]]] = set()
@@ -283,6 +298,8 @@ def _paper_spc_letter_chart(
     event_mask: pd.Series | None = None,
     note_parts: list[str] | None = None,
     height: int = 470,
+    single_limit_set: bool = False,
+    note_intro: str = "One baseline-only reference limit set is shown.",
 ) -> go.Figure:
     if df.empty or value_column not in df:
         return _empty_figure(title)
@@ -313,7 +330,8 @@ def _paper_spc_letter_chart(
             )
         )
 
-    _add_paper_limit_traces(fig, ordered, limit_columns)
+    limit_reference = _single_reference_stream(ordered) if single_limit_set else ordered
+    _add_paper_limit_traces(fig, limit_reference, limit_columns)
 
     if "_event_flag" in ordered:
         events = ordered[ordered["_event_flag"].fillna(False).astype(bool)]
@@ -339,9 +357,21 @@ def _paper_spc_letter_chart(
                 )
             )
 
-    _add_right_limit_labels(fig, ordered, limit_columns)
-    note = ", ".join(part for part in (note_parts or []) if part)
-    return _apply_paper_spc_layout(fig, title=title, yaxis_title=yaxis_title, note=note, height=height)
+    _add_right_limit_labels(fig, limit_reference, limit_columns)
+    if note_parts is None:
+        note_parts = [
+            f"Reference={_stream_label(limit_reference.iloc[0])}",
+            *[_limit_summary(limit_reference, column, label) for column, label, _dash in reversed(limit_columns)],
+        ]
+    note = ", ".join(part for part in note_parts if part)
+    return _apply_paper_spc_layout(
+        fig,
+        title=title,
+        yaxis_title=yaxis_title,
+        note=note,
+        height=height,
+        note_intro=note_intro,
+    )
 
 
 def _paper_particle_threshold_chart(df: pd.DataFrame, metric_name: str, title: str) -> go.Figure:
@@ -472,7 +502,6 @@ def plot_fleet_thickness_trend(df: pd.DataFrame, metric_name: str) -> go.Figure:
     event_mask = _flag_series(metric_df, "warning_flag") | _flag_series(metric_df, "ooc_flag")
 
     limit_columns = [(ucl_column, "UCL", "dot"), (cl_column, "CL", "solid"), (lcl_column, "LCL", "dot")]
-    note_parts = [_limit_summary(metric_df, lcl_column, "LCL"), _limit_summary(metric_df, ucl_column, "UCL"), _limit_summary(metric_df, cl_column, "CL")]
     return _paper_spc_letter_chart(
         metric_df,
         title=title,
@@ -480,8 +509,9 @@ def plot_fleet_thickness_trend(df: pd.DataFrame, metric_name: str) -> go.Figure:
         yaxis_title=label,
         limit_columns=limit_columns,
         event_mask=event_mask,
-        note_parts=note_parts,
         height=500,
+        single_limit_set=True,
+        note_intro="One baseline-only Golden Tool reference limit set is applied to all overlaid chambers.",
     )
 
 
