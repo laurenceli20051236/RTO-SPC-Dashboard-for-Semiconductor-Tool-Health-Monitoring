@@ -46,17 +46,28 @@ else:
 
     st.subheader("Fleet Overview")
     st.caption("Fleet overlay is chamber-level when a tool is selected, e.g. RTO_01_Ch_A and RTO_01_Ch_B.")
-    top_left, top_right = st.columns(2)
-    with top_left:
-        st.plotly_chart(plot_fleet_thickness_trend(fleet_source, "thickness_rtr_mean"), use_container_width=True)
-    with top_right:
-        st.plotly_chart(plot_fleet_thickness_trend(fleet_source, "thickness_xbar"), use_container_width=True)
+    fleet_stream_count = len(fleet_source[["tool_id", "chamber_id"]].drop_duplicates())
+    fleet_charts = [
+        plot_fleet_thickness_trend(fleet_source, "thickness_rtr_mean"),
+        plot_fleet_thickness_trend(fleet_source, "thickness_xbar"),
+        plot_fleet_thickness_trend(fleet_source, "thickness_wiw_stdev"),
+        plot_fleet_thickness_trend(fleet_source, "thickness_sigma"),
+    ]
+    if fleet_stream_count > 2:
+        for chart in fleet_charts:
+            st.plotly_chart(chart, use_container_width=True)
+    else:
+        top_left, top_right = st.columns(2)
+        with top_left:
+            st.plotly_chart(fleet_charts[0], use_container_width=True)
+        with top_right:
+            st.plotly_chart(fleet_charts[1], use_container_width=True)
 
-    bottom_left, bottom_right = st.columns(2)
-    with bottom_left:
-        st.plotly_chart(plot_fleet_thickness_trend(fleet_source, "thickness_wiw_stdev"), use_container_width=True)
-    with bottom_right:
-        st.plotly_chart(plot_fleet_thickness_trend(fleet_source, "thickness_sigma"), use_container_width=True)
+        bottom_left, bottom_right = st.columns(2)
+        with bottom_left:
+            st.plotly_chart(fleet_charts[2], use_container_width=True)
+        with bottom_right:
+            st.plotly_chart(fleet_charts[3], use_container_width=True)
 
     st.plotly_chart(
         plot_fleet_event_count_bar(fleet_events, group_by=["tool_id", "chamber_id", "metric_name"], title="Thickness Event Count by Tool / Chamber / Metric"),

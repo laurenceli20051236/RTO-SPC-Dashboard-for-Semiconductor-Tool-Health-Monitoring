@@ -128,6 +128,37 @@ def test_fleet_thickness_chart_labels_same_tool_chamber_overlay() -> None:
     assert "RTO_01_Ch_B" in trace_names
 
 
+def test_fleet_overlay_reserves_space_for_many_streams() -> None:
+    rows = []
+    for tool_number in range(1, 5):
+        for chamber_number in range(1, 3):
+            rows.append(
+                {
+                    "timestamp": pd.Timestamp("2026-01-01"),
+                    "phase": "monitoring",
+                    "tool_id": f"RTO_A{tool_number:02d}",
+                    "chamber_id": f"CH{chamber_number}",
+                    "recipe_group": "RTO_BASELINE",
+                    "monitor_type": "Thickness",
+                    "metric_name": "rtr_mean",
+                    "value": 100.0,
+                    "ucl": 101.0,
+                    "cl": 100.0,
+                    "lcl": 99.0,
+                    "warning_flag": False,
+                    "ooc_flag": False,
+                    "rule_triggered": "",
+                }
+            )
+
+    fig = plot_fleet_thickness_trend(pd.DataFrame(rows), "rtr_mean")
+
+    assert fig.layout.height == 528
+    assert fig.layout.margin.t == 120
+    assert fig.layout.legend.xanchor == "right"
+    assert fig.layout.title.yanchor == "top"
+
+
 def test_fleet_particle_chart_uses_threshold_logic_only() -> None:
     rows = []
     for tool_id, chamber_id, severity, rule, value in [

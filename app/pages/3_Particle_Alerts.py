@@ -46,12 +46,22 @@ else:
 
     st.subheader("Fleet Overview")
     st.caption("Fleet overlay is chamber-level when a tool is selected, e.g. RTO_01_Ch_A and RTO_01_Ch_B.")
-    first, second = st.columns(2)
-    with first:
-        st.plotly_chart(plot_fleet_particle_trend(fleet_source, "particle_total_adder"), use_container_width=True)
-    with second:
-        st.plotly_chart(plot_fleet_particle_trend(fleet_source, "particle_cluster_adder"), use_container_width=True)
-    st.plotly_chart(plot_fleet_particle_trend(fleet_source, "particle_large_adder"), use_container_width=True)
+    fleet_stream_count = len(fleet_source[["tool_id", "chamber_id"]].drop_duplicates())
+    fleet_charts = [
+        plot_fleet_particle_trend(fleet_source, "particle_total_adder"),
+        plot_fleet_particle_trend(fleet_source, "particle_cluster_adder"),
+        plot_fleet_particle_trend(fleet_source, "particle_large_adder"),
+    ]
+    if fleet_stream_count > 2:
+        for chart in fleet_charts:
+            st.plotly_chart(chart, use_container_width=True)
+    else:
+        first, second = st.columns(2)
+        with first:
+            st.plotly_chart(fleet_charts[0], use_container_width=True)
+        with second:
+            st.plotly_chart(fleet_charts[1], use_container_width=True)
+        st.plotly_chart(fleet_charts[2], use_container_width=True)
 
     st.plotly_chart(
         plot_fleet_event_count_bar(fleet_events, group_by=["tool_id", "chamber_id", "metric_name"], title="Particle Event Count by Tool / Chamber / Metric"),

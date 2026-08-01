@@ -236,22 +236,25 @@ def _apply_paper_spc_layout(
     note: str,
     height: int = 470,
     note_intro: str = "Baseline-only golden-tool reference limits are shown per stream.",
+    stream_count: int = 1,
 ) -> go.Figure:
+    legend_rows = max(1, (stream_count + 3) // 4)
+    legend_extra_height = (legend_rows - 1) * 28
     fig.update_layout(
-        title=dict(text=title, font=dict(size=15), x=0.0, xanchor="left"),
+        title=dict(text=title, font=dict(size=15), x=0.0, xanchor="left", y=0.98, yanchor="top"),
         xaxis_title="WEEK",
         yaxis_title=yaxis_title.upper(),
         template="plotly_white",
-        height=height,
+        height=height + legend_extra_height,
         plot_bgcolor="#fffdf8",
         paper_bgcolor="#fffdf8",
         font=dict(color="#111111", family="Arial"),
-        margin=dict(l=72, r=88, t=92, b=145),
+        margin=dict(l=72, r=88, t=92 + legend_extra_height, b=145),
         legend=dict(
             title=None,
             orientation="h",
             x=1.0,
-            y=1.11,
+            y=1.02,
             xanchor="right",
             yanchor="bottom",
             bgcolor="rgba(255,255,255,0)",
@@ -371,6 +374,7 @@ def _paper_spc_letter_chart(
         note=note,
         height=height,
         note_intro=note_intro,
+        stream_count=int(ordered["_stream_legend"].nunique()),
     )
 
 
@@ -486,6 +490,7 @@ def _paper_particle_threshold_chart(df: pd.DataFrame, metric_name: str, title: s
         note=note,
         height=500,
         note_intro="Fixed Warning/High thresholds are retained; no shared SPC limits.",
+        stream_count=int(ordered["_stream_legend"].nunique()),
     )
 
 
