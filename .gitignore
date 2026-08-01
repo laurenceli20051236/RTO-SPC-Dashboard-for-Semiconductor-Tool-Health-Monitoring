@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.streamlit/secrets.toml
+tmp/
+reports/chatgpt_review_bundle/
+reports/github_project_export/
+reports/*.zip
