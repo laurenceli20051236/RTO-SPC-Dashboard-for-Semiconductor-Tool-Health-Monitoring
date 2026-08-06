@@ -10,13 +10,15 @@ def test_step6_required_documentation_files_exist() -> None:
     required = [
         "docs/portfolio_case_study.md",
         "docs/architecture_overview.md",
-        "docs/methodology_summary.md",
-        "docs/interview_talking_points.md",
+        "docs/methodology.md",
+        "docs/data_dictionary.md",
+        "docs/deployment_guide.md",
         "docs/recruiter_quick_start.md",
         "docs/project_limitations.md",
         "docs/release_checklist.md",
         "docs/demo_script.md",
-        "docs/chatgpt_review_package.md",
+        "docs/reporting_workflow.md",
+        "docs/schema_validation.md",
         "docs/screenshots/README.md",
     ]
     missing = [path for path in required if not (ROOT_DIR / path).exists()]

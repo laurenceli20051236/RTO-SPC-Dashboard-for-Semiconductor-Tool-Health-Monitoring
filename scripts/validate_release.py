@@ -25,13 +25,15 @@ REQUIRED_DATA_FILES = [
 REQUIRED_DOCS = [
     "portfolio_case_study.md",
     "architecture_overview.md",
-    "methodology_summary.md",
-    "interview_talking_points.md",
+    "methodology.md",
+    "data_dictionary.md",
+    "deployment_guide.md",
     "recruiter_quick_start.md",
     "project_limitations.md",
     "release_checklist.md",
     "demo_script.md",
-    "chatgpt_review_package.md",
+    "reporting_workflow.md",
+    "schema_validation.md",
     "screenshots/README.md",
 ]
 

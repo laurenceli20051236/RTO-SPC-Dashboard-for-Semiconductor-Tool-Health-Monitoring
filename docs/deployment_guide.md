@@ -11,13 +11,7 @@ streamlit run app/dashboard.py
 
 Open the app at the local URL printed by Streamlit.
 
-Local URLs such as `127.0.0.1:8501` and `localhost:8501` only work on the machine running Streamlit. For ChatGPT or remote reviewer debugging, generate the portable review bundle instead:
-
-```bash
-python scripts/create_review_bundle.py
-```
-
-The bundle is written to `reports/chatgpt_review_bundle.zip`.
+Local URLs such as `127.0.0.1:8501` and `localhost:8501` only work on the machine running Streamlit.
 
 ## Streamlit Cloud
 
