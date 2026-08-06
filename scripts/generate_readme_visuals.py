@@ -225,7 +225,7 @@ def generate_project_flow(output_path: Path = OUTPUT_PATH) -> Path:
     ci_box = (70, 970, 1730, 1060)
     draw.rounded_rectangle(ci_box, radius=8, fill=WHITE, outline=INK, width=3)
     draw.text((95, 994), "GitHub Actions CI", font=SECTION_FONT, fill=INK)
-    ci_steps = ["Regenerate data", "Validate schemas", "Run 90 tests", "Validate release"]
+    ci_steps = ["Regenerate data", "Validate schemas", "Run tests", "Validate release"]
     start_x = 400
     step_width = 260
     for index, step in enumerate(ci_steps):
@@ -449,7 +449,7 @@ def generate_project_flow_swimlane(output_path: Path = ALTERNATE_OUTPUT_PATH) ->
     draw.text((94, 963), "CONTINUOUS VERIFICATION", font=SECTION_FONT, fill=WHITE)
     draw.text((1452, 968), "GitHub Actions CI", font=SMALL_BOLD_FONT, fill=WHITE)
 
-    ci_steps = ["Regenerate data", "Validate schemas", "Run 90 tests", "Validate release"]
+    ci_steps = ["Regenerate data", "Validate schemas", "Run tests", "Validate release"]
     step_width = 310
     step_gap = 78
     start_x = 112

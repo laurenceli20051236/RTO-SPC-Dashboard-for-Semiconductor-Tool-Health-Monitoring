@@ -40,7 +40,7 @@ Total, Cluster, and Large Adder charts retain fixed Warning/High thresholds and 
 | --- | --- |
 | Semiconductor SPC | RTO thickness and particle rules, chamber-level review, baseline integrity, and separate stream limits |
 | Python and data engineering | Deterministic generation, validated CSV contracts, modular rule engines, and persisted event records |
-| Product and delivery | Streamlit drilldown, Plotly review charts, 90 automated tests, GitHub Actions, and deployment documentation |
+| Product and delivery | Streamlit drilldown, Plotly review charts, automated tests, GitHub Actions, and deployment documentation |
 
 <details>
 <summary><strong>Methodology and scope guardrails</strong></summary>
@@ -103,25 +103,17 @@ See [deployment_guide.md](docs/deployment_guide.md) for the deployment checklist
 </details>
 
 <details>
-<summary><strong>Repository map and GitHub export</strong></summary>
+<summary><strong>Repository map</strong></summary>
 
 ```text
 app/                 Streamlit entry point and review pages
 src/rto_spc/         Data generation, limits, rules, scoring, and charts
 data/                Public-safe synthetic CSV outputs
 tests/               Unit, integration, schema, release, and QA gates
-scripts/             Generation, validation, visual, review, and export commands
-docs/                Methodology, architecture, deployment, and interview notes
+scripts/             Data generation, validation, and visual regeneration commands
+docs/                Methodology, architecture, deployment, and reviewer guidance
 .github/workflows/   GitHub Actions CI
 ```
-
-Create a clean GitHub upload package:
-
-```bash
-python scripts/create_github_export.py
-```
-
-Upload the contents of `reports/github_project_export/` as the repository root. The generated ZIP is `reports/rto_spc_dashboard_github_export.zip`.
 
 </details>
 
